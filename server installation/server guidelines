@@ -1,0 +1,25 @@
+
+
+1) git clone {-------------}
+2) sudo apt-get install
+3)bundle install
+
+
+Then copy the server file in sublime text with name .env.example
+And create another file with the name of .env.development and change the following fields
+   RDS_DB_NAME=freshgrc_development
+   RDS_USERNAME=colkar
+   RDS_PASSWORD=colkar
+     if error ocuure please check that
+4)sudo apt-get update
+5)sudo apt-get install postgresql postgresql-contrib
+6)sudo su postgres
+7)psql
+8)CREATE USER username WITH PASSWORD "password";
+9)CREATE DATABASE database name;
+10) GRANT ALL PREVILEGES ON DATABASE database name;
+11)ALTER USER username Superuser;
+12) rake db:create
+13) rake db:migrate
+14) rake db:seed
+
