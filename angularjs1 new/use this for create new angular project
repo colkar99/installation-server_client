@@ -1,0 +1,211 @@
+USE this URL to create new angular project
+////////////////////////////////////////////////////////////////////////////////////////////
+http://www.webagesolutions.com/knowledgebase/kb004-Building-Angular-Apps-with-Grunt.html////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+AUGUST 20, 2015 / KB-004
+Building AngularJS Apps with Grunt.js (Part 1)
+
+Check out these related webinars...
+
+UNIT TESTING ANGULARJS CODE
+GET READY FOR ANGULAR 2.0
+INTRODUCTION TO ANGULARUI AND UI-BOOTSTRAP
+BUILDING ANGULARJS APPS WITH GRUNT.JS
+HYBRID MOBILE DEVELOPMENT WITH ANGULARJS AND IONIC
+JAVASCRIPT FOR WEB 2.0 DEVELOPMENT
+ANGULARJS
+This AngularJS tutorial uses the Grunt app to build an Angularjs app. We're not going to cover a lot of Angularjs territory - for that we'd recommend an AngularJS tutorial from our series.
+
+A Build System for AngularJS applications
+
+On the surface, one of the appealing things about developing JavaScript applications is that we can do a lot of work using a simple text editor to edit JavaScript and html files in a folder that is served out by a local web server. In fact, it's fairly common for developers to simply put the entire web folder under version control (typically 'git' these days), and then simply pull updates into the web server's web content folder.
+
+There are a few problems with this approach. To start with, apparently a lot of developers don't do it right, and leave the '.git' folder exposed.
+
+Apart from that, it turns out that in most cases, we would like to do some processing on our web site or Single Page Application (SPA) source. For instance, we might want to use a style sheet compiler like 'less' or 'sass' to make it easier to create cascadable style sheet (css) files. Or we'd like to put all our JavaScript into a single file and 'minify' it to speed up the initial page loading. Perhaps we'd like to use a different dialect of JavaScript, like ECMAScript 6 or CoffeeScript. If we're writing JavaScript, we might want to test it using the 'jasmine' behavioral testing framework.
+
+All these things require us to use a more traditional software development approach, where we have a 'source' tree that contains input files, and we use a build system to process this source into an 'object' form that we can deploy to a production server.
+
+This article will show you how to install and setup a build tool for your web projects. We'll use a tool called 'yeoman' to setup the template AngularJS application. Although we're talking about an AngularJS app here, 'yeoman' supports many different application types, and the basic ideas can be applied to almost any project that is built using a JavaScript framework.
+
+The Basics - Node.js and 'npm'
+
+It's no surprise that developers who work on JavaScript applications like working in JavaScript. So many developer tools and utilities are written in JavaScript and run under 'Node.js' (often called simply 'Node'). Node is an execution environment that lets you run JavaScript code from the command line, either in a server environment or in your development environment (in other words, not in a web browser). Many development apps, including the Grunt app, run under Node.
+
+In a short Grunt tutorial like this, we can barely scratch the surface of the possibilities of Node.js, but if you look around the web, you'll find many many projects using the Grunt app as their build system.
+
+You can find instructions on how to install Node at (https://nodejs.org). You'll need to install Node before continuing.
+
+Yeoman
+
+Yeoman is what's called a "scaffolding" tool. Essentially, it creates files for you, either one at a time, or en masse. For instance, if we're working on an AngularJS project, we can use Yeoman to create a basic starter set of files to establish the project, and we can use it afterwards to create boiler-plate controllers or routes.
+
+There is a huge library of so-called "generators" that we can install to generate various artifacts using Yeoman's command line interface 'yo'.
+
+We install Yeoman using the 'npm' package manager that came with Node.
+
+$ sudo npm install -g yo
+The Bower Package Manager
+
+JavaScript development is interesting in that we quite often want to include pre-packaged files in our target folder. For instance, AngularJS actually ships as a set of javascript files that we'll reference from our single page application. Other items like angular ui components might also include css or html files. Managing all these files will rapidly get complicated, especially when one package uses resources from another package.
+
+To simplify this management, we'll use the 'Bower' package manager. We can install it using 'npm'
+
+$ sudo npm install -g bower
+Now, you may be thinking, "I already installed a package manager for Node, what's with the other package manager?" The answer is that they're managing different sets of packages. The Node package manager is dealing with the packages that we're running during development using Node. Bower is going to handle packages that we'll ship with the product for use at runtime in the browser.
+
+Grunt Task Runner
+
+Finally, the actual build tool, or "task runner" is 'Grunt.js'. We'll install that using the npm package 'grunt-cli' (that's the Grunt command line interface).
+
+$ sudo npm install -g grunt-cli
+The AngularJS Generator for Yeoman
+
+Yeoman can be used to generate many, many different types of projects and scaffolding files. It does its work by calling one or more "generator" modules. These generator modules are installed as Node packages, using 'npm'.
+
+For this sample project, we're going to use the the official AngularJS generator, which is called 'generator-angular'.
+
+$ sudo npm install -g generator-angular
+Use Yeoman to create the project
+
+Finally, now that we have all the tools that we need, we can go about creating the actual project.
+
+First, create a project directory and cd into it.
+
+$ mkdir great-app
+$ cd great-app
+Now let's invoke the angular generator. In the command line below, 'yo' invokes Yeoman, 'angular' tells Yeoman that we want to run the generator for AngularJS, and 'great' is the name of the app we want to create.
+
+$ yo angular great
+You'll see some output, and 'yo' starts asking questions.
+
+    _-----_
+   |       |    .--------------------------.
+   |--(o)--|    |    Welcome to Yeoman,    |
+  `---------´   |   ladies and gentlemen!  |
+   ( _´U`_ )    '--------------------------'
+   /___A___\
+    |  ~  |
+  __'.___.'__
+´   `  |° ´ Y `
+
+Out of the box I include Bootstrap and some AngularJS recommended modules.
+
+? Would you like to use Sass (with Compass)? (Y/n)
+We're going to keep the generated app as simple as possible for now, so answer 'n' to the question about using "Sass".
+
+? Would you like to include Bootstrap? (Y/n)
+Similarly, answer 'n' to using Bootsrap.
+
+Yeoman will ask about a number of modules that could be added to AngularJS:
+
+? Which modules would you like to include? (Press <space> to select)
+❯◉ angular-animate.js
+ ◯ angular-aria.js
+ ◉ angular-cookies.js
+ ◉ angular-resource.js
+ ◯ angular-messages.js
+ ◉ angular-route.js
+ ◉ angular-sanitize.js
+ ◉ angular-touch.js
+Use the cursor keys and space bar to de-select all of these modules (again, we're trying to keep it simple), and then press 'Return'.
+
+After some output, you'll see a question about overwriting 'package.json'. This is just a case of 'npm' being overly cautious - just hit return to accept the default 'Y' answer.
+
+After a while, Yeoman finishes the job.
+
+The Resulting Application folder
+
+Let's have a look at what Yeoman built for us.
+
+.
+├── Gruntfile.js
+├── README.md
+├── app
+│   ├── 404.html
+│   ├── favicon.ico
+│   ├── images
+│   ├── index.html
+│   ├── robots.txt
+│   ├── scripts
+│   ├── styles
+│   └── views
+├── bower.json
+├── bower_components
+│   ├── angular
+│   └── angular-mocks
+├── node_modules
+│   ├── grunt
+│   ├── grunt-angular-templates
+│   ├── grunt-autoprefixer
+│   ├── grunt-concurrent
+│   ├── grunt-contrib-clean
+│   ├── grunt-contrib-concat
+│   ├── grunt-contrib-connect
+│   ├── grunt-contrib-copy
+│   ├── grunt-contrib-cssmin
+│   ├── grunt-contrib-htmlmin
+│   ├── grunt-contrib-imagemin
+│   ├── grunt-contrib-jshint
+│   ├── grunt-contrib-uglify
+│   ├── grunt-contrib-watch
+│   ├── grunt-filerev
+│   ├── grunt-google-cdn
+│   ├── grunt-karma
+│   ├── grunt-newer
+│   ├── grunt-ng-annotate
+│   ├── grunt-svgmin
+│   ├── grunt-usemin
+│   ├── grunt-wiredep
+│   ├── jasmine-core
+│   ├── jit-grunt
+│   ├── jshint-stylish
+│   ├── karma
+│   ├── karma-jasmine
+│   ├── karma-phantomjs-launcher
+│   ├── phantomjs
+│   └── time-grunt
+├── package.json
+└── test
+    ├── karma.conf.js
+    └── spec
+As we can see, there is a folder called 'app' that is meant to contain the AngularJS application. As well, there's a file called 'Gruntfile.js' that contains the configuration function for Grunt. The folder 'bower-components' contains the packages that are installed using Bower, and the 'node_modules' folder contains the Node modules that we installed, along with their dependencies.
+
+Conclusion
+
+So far, we've setup the infrastructure for using Yeoman to build a starting point for an application, and we then used Yeoman to setup a template.
+
+In Part 2 of this Grunt Tutorial, we'll explore the Gruntfile and then perform the actual build. In the meantime, don't forget to checkout the AngularJS tutorial here.
+
+Related Webinars
+
+Unit Testing AngularJS Code
+Get Ready For Angular 2.0
+Introduction To AngularUI And UI-Bootstrap
+Building AngularJS Apps With Grunt.Js
+Hybrid Mobile Development With AngularJS And Ionic
+JavaScript For Web 2.0 Development
+AngularJS
+Related Training
+
+WA2425
+AngularJS Training
+AngularJS Programming
+Instructor Led Virtual 09/11/2017 - 09/13/2017
+Toronto 09/18/2017 - 09/20/2017
+Calgary 09/25/2017 - 09/27/2017
+Vancouver 10/02/2017 - 10/04/2017
+Instructor Led Virtual 10/16/2017 - 10/18/2017
+WA2406
+AngularJS Training
+Introduction to Responsive Web Development with AngularJS and Bootstrap
+Vancouver 09/11/2017 - 09/14/2017
+Montreal 09/11/2017 - 09/14/2017
+Instructor Led Virtual 09/18/2017 - 09/21/2017
+Toronto 09/18/2017 - 09/21/2017
+Instructor Led Virtual 10/16/2017 - 10/19/2017
+Ottawa 10/16/2017 - 10/19/2017
+Toronto 10/23/2017 - 10/26/2017
